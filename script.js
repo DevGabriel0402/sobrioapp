@@ -8,17 +8,6 @@ window.addEventListener("load", () => {
     document.getElementById("loading").classList.add("hidden-container");
     document.getElementById("config").classList.remove("hidden-container");
   }, 1500);
-
-  const modalItem = document.getElementById("modal");
-  const modalEstado = localStorage.getItem("modal");
-
-  if (modalEstado === "modalFechado") {
-    modalItem.classList.add("hidden");
-  } else {
-    modalItem.classList.remove("hidden");
-  }
-
-  loadSavedDate();
 });
 
 // Função para calcular o tempo de sobriedade
@@ -170,15 +159,6 @@ const configButton = document.getElementById("config");
 if (configButton) {
   configButton.addEventListener("click", () => {
     const modal = document.querySelector("#modal");
-    const imgConfig = document.getElementById("img-config");
     modal.classList.toggle("hidden");
-
-    if (modal.classList.contains("hidden")) {
-      imgConfig.src = "./assets/config.svg";
-
-    } else {
-      imgConfig.src = "./assets/arrow.svg";
-
-    }
   });
 }
