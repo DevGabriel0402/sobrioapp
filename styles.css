@@ -13,8 +13,9 @@ body {
   width: 100%;
   min-height: 100dvh;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   padding: 10px 20px;
   background-color: var(--cor-bg);
 }
@@ -29,12 +30,14 @@ body {
 }
 #loading {
   position: fixed;
+  top: 50%;
   width: 30px;
   height: 30px;
   border: 2px solid var(--color-white);
   border-radius: 50%;
   animation: spin 0.5s linear infinite;
   border-right: 4px solid transparent;
+  transform: trn;
 }
 
 #config {
@@ -53,6 +56,7 @@ body {
 }
 
 .container {
+  margin-top: 30px;
   width: 100%;
   max-width: 400px;
   display: flex;
@@ -189,6 +193,16 @@ button {
 }
 #bg-4 {
   --bgcolor: #accbe0;
+}
+
+footer{
+  font-size: 10px;
+  color: var(--color-white);
+
+  & span{
+    font-weight: bold;
+    cursor: pointer;
+  }
 }
 
 @keyframes moveUp {

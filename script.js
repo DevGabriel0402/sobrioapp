@@ -7,6 +7,7 @@ window.addEventListener("load", () => {
     document.querySelector(".container").classList.remove("hidden-container");
     document.getElementById("loading").classList.add("hidden-container");
     document.getElementById("config").classList.remove("hidden-container");
+    document.querySelector("footer").classList.remove("hidden-container");
    
     loadSavedDate();
   }, 1500);
@@ -178,3 +179,7 @@ document.addEventListener('click', (e) => {
     
   }
 })
+
+document.getElementById('instagram').onclick = () => {
+  window.open('https://instagram.com/eu.gabrielvieira', '_blank')
+}
