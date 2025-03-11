@@ -7,10 +7,11 @@ window.addEventListener("load", () => {
     document.querySelector(".container").classList.remove("hidden-container");
     document.getElementById("loading").classList.add("hidden-container");
     document.getElementById("config").classList.remove("hidden-container");
+   
+    loadSavedDate();
   }, 1500);
 });
 
-// Função para calcular o tempo de sobriedade
 function calculateTime(startDate) {
   const today = new Date();
 
@@ -47,7 +48,7 @@ function calculateTime(startDate) {
   document.getElementById("bg-4").style.width = `${(remainingSeconds / 59) * 100}%`;
 }
 
-// Função para iniciar ou reiniciar o intervalo de atualização
+
 function startUpdating(startDate) {
   if (updateInterval) {
     clearInterval(updateInterval);
@@ -57,7 +58,7 @@ function startUpdating(startDate) {
   }, 1000);
 }
 
-// Função para carregar a data salva e calcular o tempo automaticamente
+
 function loadSavedDate() {
   const savedDate = localStorage.getItem("soberStartDate");
   const dateInput = document.getElementById("start-date");
@@ -68,7 +69,7 @@ function loadSavedDate() {
   if (savedDate) {
     dateInput.value = savedDate;
     const startDate = new Date(savedDate);
-    
+
     if (modalEstado === "modalFechado") {
       document.getElementById("modal").classList.add("hidden");
     } else {
@@ -78,37 +79,36 @@ function loadSavedDate() {
     if (vicioInput) {
       vicio.innerText = vicioInput;
     }
-    
+
     calculateTime(startDate);
     startUpdating(startDate);
   }
 }
 
-// Função principal ao clicar no botão de calcular
+
 function handleCalculate(e) {
   e.preventDefault();
   const startDateValue = document.getElementById("start-date").value;
   const startDate = new Date(startDateValue);
   const vicioValue = document.getElementById("input-vicio").value;
 
-  if (vicioValue === "nenhum") {
-    alert("Informe um vício.");
+  if (!vicioValue || vicioValue === "nenhum" || !startDateValue) {
+    alert("Informe um vício e uma data válida.");
     return;
   }
 
   document.getElementById("modal").classList.add("hidden");
-
+  localStorage.setItem("modal", "modalFechado");
   localStorage.setItem("soberStartDate", startDateValue);
   localStorage.setItem("vicio", vicioValue);
 
-  document.getElementById("start-date").value = startDate;
   document.getElementById("vicio").innerText = vicioValue;
 
   calculateTime(startDate);
   startUpdating(startDate);
 }
 
-// Função para resetar o contador
+
 const handleReset = (e) => {
   e.preventDefault();
 
@@ -121,7 +121,7 @@ const handleReset = (e) => {
 
   const vicioValue = document.getElementById("input-vicio").value;
 
-  if (vicioValue === "nenhum") {
+  if (!vicioValue || vicioValue === "nenhum") {
     alert("Informe um vício.");
     return;
   }
@@ -139,26 +139,42 @@ const handleReset = (e) => {
   startUpdating(startDate);
 };
 
-// Adiciona event listeners apenas se os elementos existirem
+
 const btnCalculate = document.querySelector("#calculate");
 const btnReset = document.querySelector("#reset");
 
 if (btnCalculate) btnCalculate.addEventListener("click", handleCalculate);
 if (btnReset) btnReset.addEventListener("click", handleReset);
 
-// Limpa o intervalo ao fechar a página
+
 window.addEventListener("beforeunload", () => {
   if (updateInterval) {
     clearInterval(updateInterval);
   }
 });
 
-// Configuração do modal
+
 const configButton = document.getElementById("config");
 
 if (configButton) {
-  configButton.addEventListener("click", () => {
+  configButton.addEventListener("click", (e) => {
     const modal = document.querySelector("#modal");
     modal.classList.toggle("hidden");
+
+    if (modal.classList.contains("hidden")) {
+      localStorage.setItem("modal", "modalFechado");
+     
+    } else {
+      localStorage.setItem("modal", "modalAberto");
+    }
   });
 }
+
+document.addEventListener('click', (e) => {
+  const modal = document.querySelector("#modal");
+  if (!modal.contains(e.target) && !configButton.contains(e.target)){
+    modal.classList.add("hidden");
+    localStorage.setItem("modal", "modalFechado");
+    
+  }
+})
