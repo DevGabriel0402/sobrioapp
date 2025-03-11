@@ -111,7 +111,7 @@ label {
   transform: translateX(2px);
 }
 
-input {
+#input-vicio, input{
   border: 1px solid #26262620;
   outline: none;
   font-size: 14px;

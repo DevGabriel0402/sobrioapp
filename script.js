@@ -8,9 +8,7 @@ window.addEventListener("load", () => {
     document.getElementById("loading").classList.add("hidden-container");
     document.getElementById("config").classList.remove("hidden-container");
   }, 1500);
-});
 
-document.addEventListener("DOMContentLoaded", () => {
   const modalItem = document.getElementById("modal");
   const modalEstado = localStorage.getItem("modal");
 
@@ -19,9 +17,11 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     modalItem.classList.remove("hidden");
   }
+
+  loadSavedDate();
 });
 
-// Função para calcular o tempo de sobriedade com dias, horas, minutos e segundos
+// Função para calcular o tempo de sobriedade
 function calculateTime(startDate) {
   const today = new Date();
 
@@ -41,26 +41,21 @@ function calculateTime(startDate) {
   const secondsSober = Math.floor(timeDiff / 1000);
   const minutesSober = Math.floor(secondsSober / 60);
   const hoursSober = Math.floor(minutesSober / 60);
-  const daysSober = Math.floor(hoursSober / 24) < 2 ? Math.floor(hoursSober / 24) : String(Math.floor(hoursSober / 24)).padStart(2, "0");
+  const daysSober = Math.floor(hoursSober / 24);
 
-  const remainingHours = hoursSober === 0 ? hoursSober % 24 : String(hoursSober % 24).padStart(2, "0");
-  const remainingMinutes = minutesSober === 0 ? minutesSober % 60 : String(minutesSober % 60).padStart(2, "0");
-  const remainingSeconds = secondsSober === 0 ? secondsSober % 60 : String(secondsSober % 60).padStart(2, "0");
+  const remainingHours = String(hoursSober % 24).padStart(2, "0");
+  const remainingMinutes = String(minutesSober % 60).padStart(2, "0");
+  const remainingSeconds = String(secondsSober % 60).padStart(2, "0");
 
   document.getElementById("days").innerText = daysSober === 1 ? `${daysSober} dia` : `${daysSober} dias`;
-  document.getElementById("hours").innerText = remainingHours === 1 ? `${remainingHours} hora` : `${remainingHours} horas`;
-  document.getElementById("minutes").innerText = remainingMinutes === 1 ? `${remainingMinutes} minuto` : `${remainingMinutes} minutos`;
-  document.getElementById("seconds").innerText = remainingSeconds === 1 ? `${remainingSeconds} segundo` : `${remainingSeconds} segundos`;
+  document.getElementById("hours").innerText = remainingHours === "01" ? `${remainingHours} hora` : `${remainingHours} horas`;
+  document.getElementById("minutes").innerText = remainingMinutes === "01" ? `${remainingMinutes} minuto` : `${remainingMinutes} minutos`;
+  document.getElementById("seconds").innerText = remainingSeconds === "01" ? `${remainingSeconds} segundo` : `${remainingSeconds} segundos`;
 
-  const dayPercentage = Math.min((daysSober / 365) * 100, 100);
-  const hoursPercentage = (remainingHours / 23) * 100;
-  const minutesPercentage = (remainingMinutes / 59) * 100;
-  const secondsPercentage = (remainingSeconds / 59) * 100;
-
-  document.getElementById("bg-1").style.width = `${dayPercentage}%`;
-  document.getElementById("bg-2").style.width = `${hoursPercentage}%`;
-  document.getElementById("bg-3").style.width = `${minutesPercentage}%`;
-  document.getElementById("bg-4").style.width = `${secondsPercentage}%`;
+  document.getElementById("bg-1").style.width = `${Math.min((daysSober / 365) * 100, 100)}%`;
+  document.getElementById("bg-2").style.width = `${(remainingHours / 23) * 100}%`;
+  document.getElementById("bg-3").style.width = `${(remainingMinutes / 59) * 100}%`;
+  document.getElementById("bg-4").style.width = `${(remainingSeconds / 59) * 100}%`;
 }
 
 // Função para iniciar ou reiniciar o intervalo de atualização
@@ -70,7 +65,7 @@ function startUpdating(startDate) {
   }
   updateInterval = setInterval(() => {
     calculateTime(startDate);
-  }, 1000); // Atualiza a cada 1 segundo
+  }, 1000);
 }
 
 // Função para carregar a data salva e calcular o tempo automaticamente
@@ -79,15 +74,22 @@ function loadSavedDate() {
   const dateInput = document.getElementById("start-date");
   const vicio = document.getElementById("vicio");
   const vicioInput = localStorage.getItem("vicio");
-  const modal = localStorage.getItem("modal");
+  const modalEstado = localStorage.getItem("modal");
 
   if (savedDate) {
     dateInput.value = savedDate;
     const startDate = new Date(savedDate);
-    document.getElementById("modal").classList.contains(modal);
+    
+    if (modalEstado === "modalFechado") {
+      document.getElementById("modal").classList.add("hidden");
+    } else {
+      document.getElementById("modal").classList.remove("hidden");
+    }
+
     if (vicioInput) {
       vicio.innerText = vicioInput;
     }
+    
     calculateTime(startDate);
     startUpdating(startDate);
   }
@@ -99,17 +101,19 @@ function handleCalculate(e) {
   const startDateValue = document.getElementById("start-date").value;
   const startDate = new Date(startDateValue);
   const vicioValue = document.getElementById("input-vicio").value;
-  const modalOpen = document.getElementById("modal");
 
-  if (!vicioValue) {
+  if (vicioValue === "nenhum") {
     alert("Informe um vício.");
     return;
   }
 
+  document.getElementById("modal").classList.add("hidden");
+
   localStorage.setItem("soberStartDate", startDateValue);
   localStorage.setItem("vicio", vicioValue);
 
-  modal.classList.add("hidden");
+  document.getElementById("start-date").value = startDate;
+  document.getElementById("vicio").innerText = vicioValue;
 
   calculateTime(startDate);
   startUpdating(startDate);
@@ -128,7 +132,7 @@ const handleReset = (e) => {
 
   const vicioValue = document.getElementById("input-vicio").value;
 
-  if (!vicioValue) {
+  if (vicioValue === "nenhum") {
     alert("Informe um vício.");
     return;
   }
@@ -146,12 +150,12 @@ const handleReset = (e) => {
   startUpdating(startDate);
 };
 
-// Carrega a data salva ao abrir a página
-window.addEventListener("load", loadSavedDate);
+// Adiciona event listeners apenas se os elementos existirem
+const btnCalculate = document.querySelector("#calculate");
+const btnReset = document.querySelector("#reset");
 
-// Vincula os eventos aos botões usando addEventListener
-document.querySelector("#calculate").addEventListener("click", handleCalculate);
-document.querySelector("#reset").addEventListener("click", handleReset);
+if (btnCalculate) btnCalculate.addEventListener("click", handleCalculate);
+if (btnReset) btnReset.addEventListener("click", handleReset);
 
 // Limpa o intervalo ao fechar a página
 window.addEventListener("beforeunload", () => {
@@ -161,16 +165,20 @@ window.addEventListener("beforeunload", () => {
 });
 
 // Configuração do modal
-document.getElementById("config").addEventListener("click", () => {
-  const modal = document.querySelector("#modal");
-  const imgConfig = document.getElementById("img-config");
-  modal.classList.toggle("hidden");
+const configButton = document.getElementById("config");
 
-  if (modal.classList.contains("hidden")) {
-    imgConfig.src = "./assets/config.svg";
-    localStorage.setItem("modal", "modalFechado");
-  } else {
-    imgConfig.src = "./assets/arrow.svg";
-    localStorage.setItem("modal", "modalAberto");
-  }
-});
+if (configButton) {
+  configButton.addEventListener("click", () => {
+    const modal = document.querySelector("#modal");
+    const imgConfig = document.getElementById("img-config");
+    modal.classList.toggle("hidden");
+
+    if (modal.classList.contains("hidden")) {
+      imgConfig.src = "./assets/config.svg";
+
+    } else {
+      imgConfig.src = "./assets/arrow.svg";
+
+    }
+  });
+}

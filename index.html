@@ -1,46 +1,55 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#1a2c3e" />
-    <title>Tempo Sóbrio</title>
-    <link rel="stylesheet" href="styles.css" />
-    <script src="script.js" defer></script>
-  </head>
-  <body>
-    <div id="loading"></div>
-    <div class="hidden-container" id="config">
-      <img id="img-config" src="./assets/config.svg" alt="config icon" />
-    </div>
-    <div class="container hidden-container" id="container">
-      <h2 class="title">Livre de <span id="vicio">...</span> há ...</h2>
-      <p class="desc">clique na engrenagem para configurar.</p>
-      <form class="hidden" id="modal">
-        <input type="text" class="vicio" id="input-vicio" placeholder="Informe seu vício" />
-        <label for="start-date">Data de início</label>
-        <input type="datetime-local" id="start-date" />
-        <button id="calculate" type="button">Calcular</button>
-        <button id="reset" type="button">Resetar</button>
-      </form>
-      <div id="result">
-        <div id="time-1" class="time-bar-container">
-          <div class="time-bar"><span id="days">0</span></div>
-          <span class="bg" id="bg-1"></span>
-        </div>
-        <div id="time-2" class="time-bar-container">
-          <div class="time-bar"><span id="hours">0</span></div>
-          <span class="bg" id="bg-2"></span>
-        </div>
-        <div id="time-3" class="time-bar-container">
-          <div class="time-bar"><span id="minutes">0</span></div>
-          <span class="bg" id="bg-3"></span>
-        </div>
-        <div id="time-4" class="time-bar-container">
-          <div class="time-bar"><span id="seconds">0</span></div>
-          <span class="bg" id="bg-4"></span>
+  <!DOCTYPE html>
+  <html lang="pt-BR">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta name="theme-color" content="#1a2c3e" />
+      <title>Tempo Sóbrio</title>
+      <link rel="stylesheet" href="styles.css" />
+      <script src="script.js" defer></script>
+    </head>
+    <body>
+      <div id="loading"></div>
+      <div class="hidden-container" id="config">
+        <img id="img-config" src="./assets/config.svg" alt="config icon" />
+      </div>
+      <div class="container hidden-container" id="container">
+        <h2 class="title">Livre de <span id="vicio">...</span> há ...</h2>
+        <p class="desc">clique na engrenagem para configurar.</p>
+        <form class="hidden" id="modal">
+          <!-- <input type="text" class="vicio" id="input-vicio" placeholder="Informe seu vício" /> -->
+          <select name="select" id="input-vicio">
+            <option value="nenhum" selected>Informe um vício</option>
+            <option value="Alcool">Alcool</option>
+            <option value="Cigarro">Cigarro</option>
+            <option value="Pornografia">Pornografia</option>
+            <option value="Remédio">Remédio</option>
+            <option value="Jogos de Azar">Jogos de Azar</option>
+            <option value="Redes Sociais">Redes Sociais</option>
+          </select>
+          <label for="start-date">Data de início</label>
+          <input type="datetime-local" id="start-date" />
+          <button id="calculate" type="button">Calcular</button>
+          <button id="reset" type="button">Resetar</button>
+        </form>
+        <div id="result">
+          <div id="time-1" class="time-bar-container">
+            <div class="time-bar"><span id="days">0</span></div>
+            <span class="bg" id="bg-1"></span>
+          </div>
+          <div id="time-2" class="time-bar-container">
+            <div class="time-bar"><span id="hours">0</span></div>
+            <span class="bg" id="bg-2"></span>
+          </div>
+          <div id="time-3" class="time-bar-container">
+            <div class="time-bar"><span id="minutes">0</span></div>
+            <span class="bg" id="bg-3"></span>
+          </div>
+          <div id="time-4" class="time-bar-container">
+            <div class="time-bar"><span id="seconds">0</span></div>
+            <span class="bg" id="bg-4"></span>
+          </div>
         </div>
       </div>
-    </div>
-  </body>
-</html>
+    </body>
+  </html>
