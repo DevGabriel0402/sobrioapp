@@ -34,14 +34,14 @@ function calculateTime(startDate) {
   const hoursSober = Math.floor(minutesSober / 60);
   const daysSober = Math.floor(hoursSober / 24);
 
-  const remainingHours = String(hoursSober % 24).padStart(2, "0");
-  const remainingMinutes = String(minutesSober % 60).padStart(2, "0");
-  const remainingSeconds = String(secondsSober % 60).padStart(2, "0");
+  const remainingHours =  hoursSober % 24 ;
+  const remainingMinutes = minutesSober % 60 ;
+  const remainingSeconds = secondsSober % 60 ;
 
   document.getElementById("days").innerText = daysSober === 1 ? `${daysSober} dia` : `${daysSober} dias`;
-  document.getElementById("hours").innerText = remainingHours === "01" ? `${remainingHours} hora` : `${remainingHours} horas`;
-  document.getElementById("minutes").innerText = remainingMinutes === "01" ? `${remainingMinutes} minuto` : `${remainingMinutes} minutos`;
-  document.getElementById("seconds").innerText = remainingSeconds === "01" ? `${remainingSeconds} segundo` : `${remainingSeconds} segundos`;
+  document.getElementById("hours").innerText = remainingHours === 1 ? `${remainingHours} hora` : `${remainingHours} horas`;
+  document.getElementById("minutes").innerText = remainingMinutes === 1 ? `${remainingMinutes} minuto` : `${remainingMinutes} minutos`;
+  document.getElementById("seconds").innerText = remainingSeconds === 1 ? `${remainingSeconds} segundo` : `${remainingSeconds} segundos`;
 
   document.getElementById("bg-1").style.width = `${Math.min((daysSober / 365) * 100, 100)}%`;
   document.getElementById("bg-2").style.width = `${(remainingHours / 23) * 100}%`;
